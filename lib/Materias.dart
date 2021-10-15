@@ -117,12 +117,55 @@ class _MateriasState extends State<Materias> {
               builder: (context) {
                 return AlertDialog(
                   title: Text('Adicionar Matéria'),
-                  content: TextField(
-                    controller: materiaName,
-                    style: TextStyle(
-                      fontSize: 24,
+                  content: Container(
+                    height: 100,
+                    child: TextFormField(
+                      controller: materiaName,
+                      decoration: InputDecoration(
+                          hintText: 'Digite o nome da atividade',
+                          hintStyle: TextStyle(fontSize: 14)),
                     ),
                   ),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: Text('Cancelar'),
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.all(10.0),
+                        primary: Colors.red.shade900,
+                        textStyle: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        setState(() {
+                          var msg = '';
+                          if (materiaName.text.isNotEmpty) {
+                            materias.add(materiaName.text);
+                            materiaName.clear();
+                            msg = 'A matéria foi adiciona com sucesso!';
+                            Navigator.pop(context);
+                          } else {
+                            msg = 'Favor digitar o nome da matéria!';
+                          }
+
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(msg),
+                            duration: Duration(seconds: 2),
+                          ));
+                        });
+                      },
+                      child: Text('Salvar'),
+                      style: TextButton.styleFrom(
+                        padding: EdgeInsets.all(10.0),
+                        primary: Colors.white,
+                        backgroundColor: Colors.teal.shade900,
+                        textStyle: TextStyle(fontSize: 14),
+                      ),
+                    ),
+                  ],
                 );
               });
         },
