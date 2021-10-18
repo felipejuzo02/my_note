@@ -46,13 +46,17 @@ class _AtividadesState extends State<Atividades> {
             Container(
               child: DefaultTabController(
                 length: 3,
-                child: TabBar(
-                  indicatorColor: Colors.teal.shade900,
-                  labelColor: Colors.teal.shade900,
-                  tabs: [
-                    Tab(text: 'Em aberto'),
-                    Tab(text: 'Concluida'),
-                    Tab(text: 'Atrasada'),
+                child: Column(
+                  children: [
+                    TabBar(
+                      indicatorColor: Colors.teal.shade900,
+                      labelColor: Colors.teal.shade900,
+                      tabs: [
+                        Tab(text: 'Em aberto'),
+                        Tab(text: 'Concluida'),
+                        Tab(text: 'Atrasada'),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -91,15 +95,9 @@ class _AtividadesState extends State<Atividades> {
                               child: Row(
                                 children: [
                                   Icon(
-                                    Icons.delete,
-                                    color: Colors.red.shade900,
+                                    Icons.check,
                                   ),
-                                  Text(
-                                    'Excluir',
-                                    style: TextStyle(
-                                      color: Colors.red.shade900,
-                                    ),
-                                  ),
+                                  Text('Marcar como concluida'),
                                 ],
                               ),
                               onTap: () {
@@ -122,7 +120,7 @@ class _AtividadesState extends State<Atividades> {
                                     color: Colors.red.shade900,
                                   ),
                                   Text(
-                                    'Marcar como Concluida',
+                                    'Excluir',
                                     style: TextStyle(
                                       color: Colors.red.shade900,
                                     ),

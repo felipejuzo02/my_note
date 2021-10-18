@@ -17,14 +17,14 @@ class ItemsAppBar extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Nome',
+                  'Luis Felipe Juzo',
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 26,
                   ),
                 ),
                 Text(
-                  'seuemail@hotmail.com',
+                  'felipejuzo02@hotmail.com',
                   style: TextStyle(
                     color: Colors.grey.shade200,
                     fontSize: 12,
