@@ -68,9 +68,7 @@ class _MateriasState extends State<Materias> {
                                   Text('Editar'),
                                 ],
                               ),
-                              onTap: () {
-                                print('teste');
-                              },
+                              onTap: () {},
                             ),
                             PopupMenuItem(
                               child: Row(

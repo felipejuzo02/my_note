@@ -90,7 +90,163 @@ class _NotasState extends State<Notas> {
                                   'Média',
                                   style: TextStyle(fontWeight: FontWeight.w600),
                                 ),
-                                Text('9.8'),
+                                Text('10'),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      trailing: IconButton(
+                        onPressed: () {
+                          NotesModal();
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                    Divider(
+                      height: 40,
+                      thickness: 0.4,
+                      color: Colors.teal.shade900,
+                      indent: 10,
+                      endIndent: 10,
+                    ),
+                    ListTile(
+                      title: Padding(
+                        padding: EdgeInsets.only(bottom: 10),
+                        child: Text(
+                          'Programação em dispositivos móveis',
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      subtitle: Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(right: 25),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'P1',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                                Text('10'),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(right: 25),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'P2',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                                Text('10'),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(right: 25),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Atividades',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                                Text('1'),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(right: 25),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Média',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                                Text('10'),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      trailing: IconButton(
+                        onPressed: () {
+                          NotesModal();
+                        },
+                        icon: Icon(
+                          Icons.edit,
+                          size: 20,
+                        ),
+                      ),
+                    ),
+                    Divider(
+                      height: 40,
+                      thickness: 0.4,
+                      color: Colors.teal.shade900,
+                      indent: 10,
+                      endIndent: 10,
+                    ),
+                    ListTile(
+                      title: Padding(
+                        padding: EdgeInsets.only(bottom: 10),
+                        child: Text(
+                          'Programação linear',
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w600),
+                        ),
+                      ),
+                      subtitle: Row(
+                        children: [
+                          Padding(
+                            padding: EdgeInsets.only(right: 25),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'P1',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                                Text('9'),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(right: 25),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'P2',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                                Text('9'),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(right: 25),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Atividades',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                                Text('1'),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(right: 25),
+                            child: Column(
+                              children: [
+                                Text(
+                                  'Média',
+                                  style: TextStyle(fontWeight: FontWeight.w600),
+                                ),
+                                Text('9.2'),
                               ],
                             ),
                           ),
@@ -116,7 +272,7 @@ class _NotasState extends State<Notas> {
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

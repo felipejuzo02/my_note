@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_note/components/Header.dart';
 import 'package:my_note/components/ItemsAppBar.dart';
 import 'package:my_note/components/MainButton.dart';
+import 'package:my_note/components/Input.dart';
 
 class MeuPerfil extends StatefulWidget {
   const MeuPerfil({Key? key}) : super(key: key);
@@ -26,7 +27,7 @@ class _MeuPerfilState extends State<MeuPerfil> {
       ),
       body: Container(
         padding: EdgeInsets.all(10),
-        child: Column(
+        child: ListView(
           children: [
             Header(
               'Meu perfil',
@@ -81,45 +82,8 @@ class _MeuPerfilState extends State<MeuPerfil> {
                       title: Text('Nome'),
                       subtitle: Text(nome),
                       trailing: IconButton(
-                        onPressed: () async {
-                          await showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: Text('Alterar nome:'),
-                                  content: Container(
-                                    height: 100,
-                                    child: TextFormField(
-                                      controller: nomeController,
-                                      decoration: InputDecoration(
-                                          hintStyle: TextStyle(fontSize: 14)),
-                                    ),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text('Cancelar'),
-                                      style: TextButton.styleFrom(
-                                        padding: EdgeInsets.all(10.0),
-                                        primary: Colors.red.shade900,
-                                        textStyle: TextStyle(fontSize: 14),
-                                      ),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {},
-                                      child: Text('Salvar'),
-                                      style: TextButton.styleFrom(
-                                        padding: EdgeInsets.all(10.0),
-                                        primary: Colors.white,
-                                        backgroundColor: Colors.teal.shade900,
-                                        textStyle: TextStyle(fontSize: 14),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              });
+                        onPressed: () {
+                          EditarInfosModal('Editar nome:', 'Nome');
                         },
                         icon: Icon(Icons.edit),
                       ),
@@ -132,45 +96,8 @@ class _MeuPerfilState extends State<MeuPerfil> {
                       title: Text('E-mail'),
                       subtitle: Text('felipejuzo02@hotmail.com'),
                       trailing: IconButton(
-                        onPressed: () async {
-                          await showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: Text('Alterar e-mail:'),
-                                  content: Container(
-                                    height: 100,
-                                    child: TextFormField(
-                                      controller: nomeController,
-                                      decoration: InputDecoration(
-                                          hintStyle: TextStyle(fontSize: 14)),
-                                    ),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text('Cancelar'),
-                                      style: TextButton.styleFrom(
-                                        padding: EdgeInsets.all(10.0),
-                                        primary: Colors.red.shade900,
-                                        textStyle: TextStyle(fontSize: 14),
-                                      ),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {},
-                                      child: Text('Salvar'),
-                                      style: TextButton.styleFrom(
-                                        padding: EdgeInsets.all(10.0),
-                                        primary: Colors.white,
-                                        backgroundColor: Colors.teal.shade900,
-                                        textStyle: TextStyle(fontSize: 14),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              });
+                        onPressed: () {
+                          EditarInfosModal('Editar e-mail:', 'E-mail');
                         },
                         icon: Icon(Icons.edit),
                       ),
@@ -183,45 +110,8 @@ class _MeuPerfilState extends State<MeuPerfil> {
                       title: Text('Senha'),
                       subtitle: Text('123456'),
                       trailing: IconButton(
-                        onPressed: () async {
-                          await showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: Text('Alterar senha:'),
-                                  content: Container(
-                                    height: 100,
-                                    child: TextFormField(
-                                      controller: nomeController,
-                                      decoration: InputDecoration(
-                                          hintStyle: TextStyle(fontSize: 14)),
-                                    ),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text('Cancelar'),
-                                      style: TextButton.styleFrom(
-                                        padding: EdgeInsets.all(10.0),
-                                        primary: Colors.red.shade900,
-                                        textStyle: TextStyle(fontSize: 14),
-                                      ),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {},
-                                      child: Text('Salvar'),
-                                      style: TextButton.styleFrom(
-                                        padding: EdgeInsets.all(10.0),
-                                        primary: Colors.white,
-                                        backgroundColor: Colors.teal.shade900,
-                                        textStyle: TextStyle(fontSize: 14),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              });
+                        onPressed: () {
+                          EditarInfosModal('Editar senha:', 'Senha');
                         },
                         icon: Icon(Icons.edit),
                       ),
@@ -234,45 +124,9 @@ class _MeuPerfilState extends State<MeuPerfil> {
                       title: Text('Data nascimento'),
                       subtitle: Text('19/07/2001'),
                       trailing: IconButton(
-                        onPressed: () async {
-                          await showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: Text('Alterar data de nascimento:'),
-                                  content: Container(
-                                    height: 100,
-                                    child: TextFormField(
-                                      controller: nomeController,
-                                      decoration: InputDecoration(
-                                          hintStyle: TextStyle(fontSize: 14)),
-                                    ),
-                                  ),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: Text('Cancelar'),
-                                      style: TextButton.styleFrom(
-                                        padding: EdgeInsets.all(10.0),
-                                        primary: Colors.red.shade900,
-                                        textStyle: TextStyle(fontSize: 14),
-                                      ),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {},
-                                      child: Text('Salvar'),
-                                      style: TextButton.styleFrom(
-                                        padding: EdgeInsets.all(10.0),
-                                        primary: Colors.white,
-                                        backgroundColor: Colors.teal.shade900,
-                                        textStyle: TextStyle(fontSize: 14),
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              });
+                        onPressed: () {
+                          EditarInfosModal(
+                              'Editar data de nascimento:', 'Data nascimento');
                         },
                         icon: Icon(Icons.edit),
                       ),
@@ -289,5 +143,46 @@ class _MeuPerfilState extends State<MeuPerfil> {
         ),
       ),
     );
+  }
+
+  EditarInfosModal(title, label) {
+    return showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(title),
+            content: Container(
+              height: 100,
+              child: Column(
+                children: [
+                  TextInput(label),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: Text('Cancelar'),
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.all(10.0),
+                  primary: Colors.red.shade900,
+                  textStyle: TextStyle(fontSize: 14),
+                ),
+              ),
+              TextButton(
+                onPressed: () {},
+                child: Text('Salvar'),
+                style: TextButton.styleFrom(
+                  padding: EdgeInsets.all(10.0),
+                  primary: Colors.white,
+                  backgroundColor: Colors.teal.shade900,
+                  textStyle: TextStyle(fontSize: 14),
+                ),
+              ),
+            ],
+          );
+        });
   }
 }
