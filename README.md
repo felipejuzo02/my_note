@@ -1,16 +1,35 @@
-# my_note
+# Minha Nota
+A project for student school management.
 
-A new Flutter project.
+## Why the project?
+The project intends to carry out a school project, taught in the subject of Programming in Mobile Devices, using the Framework Flutter, carried out in the fourth period.
 
-## Getting Started
+## The construction
+At first, its construction is just the visual (beta version of the layout) of the application, having made the use of several Widgets.
 
-This project is a starting point for a Flutter application.
+## The used Widgets
+Some widgets used are:
+- Scaffold
+- AppBar
+- Drawer
+- TabBar / TabBarView
+- ElevatedButton
+- DropdownButton
+- PopudMenuButton
+- OutlinedButton
+- IconButton
+- TextButton
+- Checkbox
+- TextField
+- AlertDialog
+- SnackBar
+- Card
+- Icon
+- Divider
+- ListView
+- ListTile
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
-
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Next steps
+Some next steps to follow are:
+- Backend construction
+- Ajustments in the TabBar
