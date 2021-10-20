@@ -38,8 +38,8 @@ class _LoginState extends State<Login> {
                   ],
                 ),
               ),
-              input('Usuário'),
-              input('Senha'),
+              TextInput('Usuário'),
+              PasswordInput('Senha'),
               Container(
                 child: TextButton(
                   child: Text('Esqueceu a senha'),

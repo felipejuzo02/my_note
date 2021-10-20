@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:my_note/Atividades.dart';
 import 'package:my_note/Login.dart';
 import 'package:my_note/Home.dart';
-import 'package:my_note/MateriaDetalhes.dart';
 import 'package:my_note/Sobre.dart';
 import 'package:my_note/Materias.dart';
 import 'package:my_note/Notas.dart';
@@ -41,7 +40,6 @@ void main() {
         'atividades': (context) => Atividades(),
         'notas': (context) => Notas(),
         'meu-perfil': (context) => MeuPerfil(),
-        'materia-detalhes': (context) => MateriaDetalhes()
       },
     ),
   );
