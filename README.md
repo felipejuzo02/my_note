@@ -1,4 +1,4 @@
-# Minha Nota
+# My Note
 A project for student school management.
 
 ## Why the project?
