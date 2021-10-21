@@ -48,7 +48,7 @@ class _LoginState extends State<Login> {
                 ),
               ),
               MainButton('Login', 'home'),
-              secundaryButton('Cadastre-se')
+              secundaryButton('Cadastre-se', 'cadastrar')
             ],
           )),
     );

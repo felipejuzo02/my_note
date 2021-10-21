@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:my_note/Atividades.dart';
+import 'package:my_note/Cadastrar.dart';
 import 'package:my_note/Login.dart';
 import 'package:my_note/Home.dart';
 import 'package:my_note/Sobre.dart';
@@ -40,6 +41,7 @@ void main() {
         'atividades': (context) => Atividades(),
         'notas': (context) => Notas(),
         'meu-perfil': (context) => MeuPerfil(),
+        'cadastrar': (context) => Cadastrar()
       },
     ),
   );

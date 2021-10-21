@@ -41,7 +41,6 @@ Widget PasswordInput(label) {
   return Container(
     height: 100,
     child: TextFormField(
-      keyboardType: TextInputType.number,
       obscureText: true,
       decoration: InputDecoration(
         labelText: label,

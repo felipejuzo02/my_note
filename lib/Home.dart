@@ -144,21 +144,18 @@ class _HomeState extends State<Home> {
                     CardHighlights(
                       'Sua maior nota',
                       Icons.star,
-                      'Até o momento, sua maior nota é em: ',
                       'Programação orientada a gambiarras',
                       'Nota: 10',
                     ),
                     CardHighlights(
                       'Sua menor nota',
                       Icons.thumb_down,
-                      'Até o momento, sua menor nota é em: ',
                       'Ingles',
                       'Nota: 6',
                     ),
                     CardHighlights(
                       'Atividades feitas',
                       Icons.task,
-                      'Você entregou mais atividades de: ',
                       'Programação orientada a gambiarras',
                       'Quantidade: 8',
                     ),
@@ -170,67 +167,40 @@ class _HomeState extends State<Home> {
         ));
   }
 
-  Widget CardHighlights(title, icon, describe, text, value) {
+  Widget CardHighlights(title, icon, text, value) {
     return Container(
-        height: 150,
+        height: 200,
         child: SizedBox.expand(
           child: Card(
             elevation: 10,
-            // color: Colors.grey.shade100,
-            child: Row(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      title,
-                      style: TextStyle(
-                        fontSize: 22,
-                        color: Colors.teal.shade900,
-                      ),
-                    ),
-                    Icon(
-                      icon,
-                      color: Colors.teal.shade900,
-                      size: 70,
-                    ),
-                  ],
-                ),
-                Container(
-                  height: 70,
-                  width: 2,
-                  color: Colors.teal.shade900,
-                ),
-                Container(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        describe,
-                        style: TextStyle(
-                          fontSize: 16,
-                        ),
-                      ),
-                      Padding(
-                        padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
-                        child: Text(
-                          text,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ),
-                      Text(
-                        value,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                        ),
-                      ),
-                    ],
+                Text(
+                  title,
+                  style: TextStyle(
+                    fontSize: 22,
+                    color: Colors.teal.shade900,
                   ),
-                )
+                ),
+                Icon(
+                  icon,
+                  color: Colors.teal.shade900,
+                  size: 70,
+                ),
+                Text(
+                  text,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+                Text(
+                  value,
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
               ],
             ),
           ),
