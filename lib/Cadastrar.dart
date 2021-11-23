@@ -1,10 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_note/components/CheckBox.dart';
-import 'package:my_note/components/Input.dart';
-import 'package:my_note/components/MainButton.dart';
 
-class Cadastrar extends StatelessWidget {
+class Cadastrar extends StatefulWidget {
   const Cadastrar({Key? key}) : super(key: key);
+
+  @override
+  _CadastrarState createState() => _CadastrarState();
+}
+
+class _CadastrarState extends State<Cadastrar> {
+  var textName = TextEditingController();
+  var textEmail = TextEditingController();
+  var textPassword = TextEditingController();
+  var textRepeatPassword = TextEditingController();
+  var textBirthDate = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -58,11 +69,76 @@ class Cadastrar extends StatelessWidget {
               Container(
                 child: Column(
                   children: [
-                    TextInput('Nome'),
-                    TextInput('E-mail'),
-                    PasswordInput('Senha'),
-                    PasswordInput('Confirme sua senha'),
-                    TextInput('Data de nascimento'),
+                    Container(
+                      height: 100,
+                      child: TextFormField(
+                        controller: textName,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          labelText: 'Nome',
+                          labelStyle: TextStyle(
+                            fontSize: 14,
+                          ),
+                          focusColor: Colors.teal.shade900,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 100,
+                      child: TextFormField(
+                        controller: textEmail,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          labelText: 'E-mail',
+                          labelStyle: TextStyle(
+                            fontSize: 14,
+                          ),
+                          focusColor: Colors.teal.shade900,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 100,
+                      child: TextFormField(
+                        controller: textPassword,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          labelText: 'Senha',
+                          labelStyle: TextStyle(
+                            fontSize: 14,
+                          ),
+                          focusColor: Colors.teal.shade900,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 100,
+                      child: TextFormField(
+                        controller: textRepeatPassword,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          labelText: 'Repita a senha',
+                          labelStyle: TextStyle(
+                            fontSize: 14,
+                          ),
+                          focusColor: Colors.teal.shade900,
+                        ),
+                      ),
+                    ),
+                    Container(
+                      height: 100,
+                      child: TextFormField(
+                        controller: textBirthDate,
+                        keyboardType: TextInputType.text,
+                        decoration: InputDecoration(
+                          labelText: 'Data de nascimento',
+                          labelStyle: TextStyle(
+                            fontSize: 14,
+                          ),
+                          focusColor: Colors.teal.shade900,
+                        ),
+                      ),
+                    ),
                     Row(
                       children: [
                         CheckBoxWithLabel('Li e concordo com os '),
@@ -73,9 +149,81 @@ class Cadastrar extends StatelessWidget {
                   ],
                 ),
               ),
-              MainButton('Criar conta', 'home'),
+              Container(
+                  height: 70,
+                  padding: EdgeInsets.only(top: 20),
+                  child: SizedBox.expand(
+                    child: (ElevatedButton(
+                      child: Text('Criar conta'),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.teal.shade900,
+                        textStyle: TextStyle(fontSize: 18),
+                      ),
+                      onPressed: () {
+                        createAccount(
+                            textName.text,
+                            textEmail.text,
+                            textPassword.text,
+                            textRepeatPassword.text,
+                            textBirthDate.text);
+                      },
+                    )),
+                  )),
             ],
           )),
     );
+  }
+
+  createAccount(name, email, password, repeatPassword, birthDate) {
+    if (name == '' ||
+        email == '' ||
+        password == '' ||
+        repeatPassword == '' ||
+        birthDate == '') {
+    } else {
+      if (password == repeatPassword) {
+        FirebaseFirestore.instance
+            .collection('users')
+            .add({
+              'name': name,
+              'email': email,
+              'birthDate': birthDate,
+            })
+            .then((value) {})
+            .catchError((err) {});
+
+        FirebaseAuth.instance
+            .createUserWithEmailAndPassword(email: email, password: password)
+            .then((value) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text('Conta criado com sucesso!!'),
+            duration: const Duration(seconds: 3),
+            backgroundColor: Colors.green.shade900,
+          ));
+
+          Navigator.pushNamed(context, 'home');
+        }).catchError((err) {
+          if (err.code == 'email-already-in-use') {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text('E-mail já está em uso, tente com outro!!'),
+              duration: const Duration(seconds: 3),
+              backgroundColor: Colors.red.shade900,
+            ));
+          } else {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text(err.message),
+              duration: const Duration(seconds: 3),
+              backgroundColor: Colors.red.shade900,
+            ));
+          }
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text('deu certo pohaa'),
+          duration: const Duration(seconds: 3),
+          backgroundColor: Colors.red.shade900,
+        ));
+      }
+    }
   }
 }

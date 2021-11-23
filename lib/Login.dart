@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_note/components/Input.dart';
-import 'package:my_note/components/MainButton.dart';
 import 'package:my_note/components/SecundaryButton.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -11,6 +10,9 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  var textEmail = TextEditingController();
+  var textPassword = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,8 +40,34 @@ class _LoginState extends State<Login> {
                   ],
                 ),
               ),
-              TextInput('Usuário'),
-              PasswordInput('Senha'),
+              Container(
+                height: 100,
+                child: TextFormField(
+                  controller: textEmail,
+                  keyboardType: TextInputType.text,
+                  decoration: InputDecoration(
+                    labelText: 'E-mail',
+                    labelStyle: TextStyle(
+                      fontSize: 14,
+                    ),
+                    focusColor: Colors.teal.shade900,
+                  ),
+                ),
+              ),
+              Container(
+                height: 100,
+                child: TextFormField(
+                  controller: textPassword,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Senha',
+                    labelStyle: TextStyle(
+                      fontSize: 14,
+                    ),
+                    focusColor: Colors.teal.shade900,
+                  ),
+                ),
+              ),
               Container(
                 child: TextButton(
                   child: Text('Esqueceu a senha'),
@@ -47,10 +75,45 @@ class _LoginState extends State<Login> {
                   onPressed: () {},
                 ),
               ),
-              MainButton('Login', 'home'),
+              Container(
+                  height: 70,
+                  padding: EdgeInsets.only(top: 20),
+                  child: SizedBox.expand(
+                    child: (ElevatedButton(
+                      child: Text('Login'),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.teal.shade900,
+                        textStyle: TextStyle(fontSize: 18),
+                      ),
+                      onPressed: () {
+                        login(textEmail.text, textPassword.text);
+                      },
+                    )),
+                  )),
               secundaryButton('Cadastre-se', 'cadastrar')
             ],
           )),
     );
+  }
+
+  void login(email, password) {
+    var message = '';
+    FirebaseAuth.instance
+        .signInWithEmailAndPassword(email: email, password: password)
+        .then((value) => Navigator.pushNamed(context, 'home'))
+        .catchError((err) {
+      if (err.code == 'user-not-found' || err.code == 'invalid-email') {
+        message =
+            'Usuário não encontrado!! Verifique os dados ou faça o cadastro.';
+      } else {
+        message = err.message;
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(message),
+        duration: const Duration(seconds: 3),
+        backgroundColor: Colors.red.shade900,
+      ));
+    });
   }
 }
