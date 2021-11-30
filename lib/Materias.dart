@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_note/components/Header.dart';
 import 'package:my_note/components/ItemsAppBar.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Materias extends StatefulWidget {
   const Materias({Key? key}) : super(key: key);
@@ -10,19 +11,69 @@ class Materias extends StatefulWidget {
 }
 
 class _MateriasState extends State<Materias> {
-  var materias = [];
+  late CollectionReference materiasT;
   var materiaName = TextEditingController();
 
   @override
   void initState() {
-    materias.add('Programação Orientada a Objetos');
-    materias.add('Programação Dispositivos Móveis');
-    materias.add('Engenharia de Software');
-    materias.add('Inglês');
-    materias.add('Metodologia de Pesquisa Cientifíca');
-    materias.add('Sistemas Operacionais');
-    materias.add('Banco de Dados');
     super.initState();
+    materiasT = FirebaseFirestore.instance.collection('subjects');
+  }
+
+  Widget CardMaterias(item) {
+    String nome = item.data()['name'];
+    return Card(
+      elevation: 10,
+      shadowColor: Colors.grey.shade200,
+      child: ListTile(
+        title: Text(
+          nome,
+          style: TextStyle(
+            fontSize: 16,
+          ),
+        ),
+        trailing: PopupMenuButton(
+          itemBuilder: (context) => <PopupMenuEntry>[
+            PopupMenuItem(
+              child: Row(
+                children: [
+                  Icon(Icons.edit),
+                  Text('Editar'),
+                ],
+              ),
+              onTap: () async {
+                materiasT.doc(item.id).set({'name': 'clayton'});
+              },
+            ),
+            PopupMenuItem(
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.delete,
+                    color: Colors.red.shade900,
+                  ),
+                  Text(
+                    'Excluir',
+                    style: TextStyle(
+                      color: Colors.red.shade900,
+                    ),
+                  ),
+                ],
+              ),
+              onTap: () {
+                setState(() {
+                  materiasT.doc(item.id).delete();
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('Matéria removida com sucesso!'),
+                    duration: Duration(seconds: 2),
+                  ));
+                });
+              },
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -45,65 +96,27 @@ class _MateriasState extends State<Materias> {
             ),
             Expanded(
               child: Container(
-                child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  itemCount: materias.length,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      elevation: 10,
-                      shadowColor: Colors.grey.shade200,
-                      child: ListTile(
-                        title: Text(
-                          materias[index],
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                        trailing: PopupMenuButton(
-                          itemBuilder: (context) => <PopupMenuEntry>[
-                            PopupMenuItem(
-                              child: Row(
-                                children: [
-                                  Icon(Icons.edit),
-                                  Text('Editar'),
-                                ],
-                              ),
-                              onTap: () {},
-                            ),
-                            PopupMenuItem(
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.delete,
-                                    color: Colors.red.shade900,
-                                  ),
-                                  Text(
-                                    'Excluir',
-                                    style: TextStyle(
-                                      color: Colors.red.shade900,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  materias.removeAt(index);
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                    content:
-                                        Text('Matéria removida com sucesso!'),
-                                    duration: Duration(seconds: 2),
-                                  ));
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              ),
+                  child: StreamBuilder<QuerySnapshot>(
+                stream: materiasT.snapshots(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                      return const Center(
+                          child: Text('Não foi possível conectar ao Firebase'));
+
+                    case ConnectionState.waiting:
+                      return const Center(child: CircularProgressIndicator());
+
+                    default:
+                      final dados = snapshot.requireData;
+                      return ListView.builder(
+                          itemCount: dados.size,
+                          itemBuilder: (context, index) {
+                            return CardMaterias(dados.docs[index]);
+                          });
+                  }
+                },
+              )),
             )
           ],
         ),
@@ -139,20 +152,33 @@ class _MateriasState extends State<Materias> {
                     TextButton(
                       onPressed: () {
                         setState(() {
-                          var msg = '';
                           if (materiaName.text.isNotEmpty) {
-                            materias.add(materiaName.text);
-                            materiaName.clear();
-                            msg = 'A matéria foi adiciona com sucesso!';
-                            Navigator.pop(context);
-                          } else {
-                            msg = 'Favor digitar o nome da matéria!';
-                          }
+                            materiasT
+                                .add({'name': materiaName.text}).then((value) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content:
+                                    Text('Matéria adicionada com sucesso!'),
+                                duration: Duration(seconds: 2),
+                              ));
 
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(msg),
-                            duration: Duration(seconds: 2),
-                          ));
+                              materiaName.text = '';
+                              Navigator.pop(context);
+                            }).catchError((err) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(SnackBar(
+                                content: Text('Erro ao adicionar matéria!'),
+                                duration: Duration(seconds: 2),
+                                backgroundColor: Colors.red.shade900,
+                              ));
+                            });
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text('Favor escreva o nome da matéria'),
+                              duration: Duration(seconds: 2),
+                              backgroundColor: Colors.red.shade900,
+                            ));
+                          }
                         });
                       },
                       child: Text('Salvar'),

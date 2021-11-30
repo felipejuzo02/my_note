@@ -182,15 +182,11 @@ class _CadastrarState extends State<Cadastrar> {
         birthDate == '') {
     } else {
       if (password == repeatPassword) {
-        FirebaseFirestore.instance
-            .collection('users')
-            .add({
-              'name': name,
-              'email': email,
-              'birthDate': birthDate,
-            })
-            .then((value) {})
-            .catchError((err) {});
+        FirebaseFirestore.instance.collection('users').add({
+          'name': name,
+          'email': email,
+          'birthDate': birthDate,
+        }).then((value) {});
 
         FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password)
@@ -219,7 +215,7 @@ class _CadastrarState extends State<Cadastrar> {
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('deu certo pohaa'),
+          content: Text('As senhas nao conferem'),
           duration: const Duration(seconds: 3),
           backgroundColor: Colors.red.shade900,
         ));

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_note/classes/InfosLogin.dart';
 import 'package:my_note/components/SecundaryButton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -98,9 +99,14 @@ class _LoginState extends State<Login> {
 
   void login(email, password) {
     var message = '';
+    var emailObj = InfosLogin(email);
     FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
-        .then((value) => Navigator.pushNamed(context, 'home'))
+        .then((value) => Navigator.pushNamed(
+              context,
+              'home',
+              arguments: emailObj,
+            ))
         .catchError((err) {
       if (err.code == 'user-not-found' || err.code == 'invalid-email') {
         message =

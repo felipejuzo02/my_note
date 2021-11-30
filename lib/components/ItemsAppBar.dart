@@ -1,10 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:my_note/Home.dart';
 
-class ItemsAppBar extends StatelessWidget {
+class ItemsAppBar extends StatefulWidget {
   const ItemsAppBar({Key? key}) : super(key: key);
 
   @override
+  _ItemsAppBarState createState() => _ItemsAppBarState();
+}
+
+Widget informations(item) {
+  String name = item.data()['name'];
+  return Text(name);
+}
+
+class _ItemsAppBarState extends State<ItemsAppBar> {
+  String name = 's';
+  late CollectionReference materiasT;
+
+  @override
+  void initState() {
+    super.initState();
+    materiasT = FirebaseFirestore.instance.collection('subjects');
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var name = profile.name;
+    var email = profile.email;
+    // var email = ModalRoute.of(context)!.settings.arguments as InfosLogin;
     return Container(
       child: ListView(
         children: [
@@ -17,14 +41,14 @@ class ItemsAppBar extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Luis Felipe Juzo',
+                  name,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 26,
                   ),
                 ),
                 Text(
-                  'felipejuzo02@hotmail.com',
+                  email,
                   style: TextStyle(
                     color: Colors.grey.shade200,
                     fontSize: 12,
@@ -37,6 +61,7 @@ class ItemsAppBar extends StatelessWidget {
             leading: Icon(Icons.home),
             title: Text('Home'),
             onTap: () {
+              print(name);
               Navigator.pushNamed(
                 context,
                 'home',
@@ -77,6 +102,7 @@ class ItemsAppBar extends StatelessWidget {
             leading: Icon(Icons.fact_check),
             title: Text('Notas'),
             onTap: () {
+              print('teste');
               Navigator.pushNamed(
                 context,
                 'notas',

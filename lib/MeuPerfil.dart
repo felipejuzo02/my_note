@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_note/Home.dart';
 import 'package:my_note/components/Header.dart';
 import 'package:my_note/components/ItemsAppBar.dart';
 import 'package:my_note/components/MainButton.dart';
@@ -12,7 +13,10 @@ class MeuPerfil extends StatefulWidget {
 }
 
 class _MeuPerfilState extends State<MeuPerfil> {
-  var nome = 'Luis Felipe Juzo';
+  var name = profile.name;
+  var email = profile.email;
+  var password = profile.password;
+  var birthDate = profile.birthDate;
   var nomeController = TextEditingController();
 
   @override
@@ -80,7 +84,7 @@ class _MeuPerfilState extends State<MeuPerfil> {
                   child: Card(
                     child: ListTile(
                       title: Text('Nome'),
-                      subtitle: Text(nome),
+                      subtitle: Text(name),
                       trailing: IconButton(
                         onPressed: () {
                           EditarInfosModal('Editar nome:', 'Nome');
@@ -94,7 +98,7 @@ class _MeuPerfilState extends State<MeuPerfil> {
                   child: Card(
                     child: ListTile(
                       title: Text('E-mail'),
-                      subtitle: Text('felipejuzo02@hotmail.com'),
+                      subtitle: Text(email),
                       trailing: IconButton(
                         onPressed: () {
                           EditarInfosModal('Editar e-mail:', 'E-mail');
@@ -108,7 +112,7 @@ class _MeuPerfilState extends State<MeuPerfil> {
                   child: Card(
                     child: ListTile(
                       title: Text('Senha'),
-                      subtitle: Text('123456'),
+                      subtitle: Text(password),
                       trailing: IconButton(
                         onPressed: () {
                           EditarInfosModal('Editar senha:', 'Senha');
@@ -122,7 +126,7 @@ class _MeuPerfilState extends State<MeuPerfil> {
                   child: Card(
                     child: ListTile(
                       title: Text('Data nascimento'),
-                      subtitle: Text('19/07/2001'),
+                      subtitle: Text(birthDate),
                       trailing: IconButton(
                         onPressed: () {
                           EditarInfosModal(
