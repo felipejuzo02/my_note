@@ -1,7 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:my_note/components/CheckBox.dart';
 import 'package:my_note/components/Header.dart';
-import 'package:my_note/components/Input.dart';
 import 'package:my_note/components/ItemsAppBar.dart';
 
 class Atividades extends StatefulWidget {
@@ -12,9 +12,11 @@ class Atividades extends StatefulWidget {
 }
 
 class _AtividadesState extends State<Atividades> {
+  late CollectionReference activity;
   var atividades = [];
   var data = [];
-  var materiaName = TextEditingController();
+  var acitivityName = TextEditingController();
+  var dueDateName = TextEditingController();
 
   @override
   void initState() {
@@ -25,6 +27,33 @@ class _AtividadesState extends State<Atividades> {
     atividades.add('Protótipo Tela 1');
     data.add('29/11/2021');
     super.initState();
+    activity = FirebaseFirestore.instance.collection('activities');
+  }
+
+  Widget CardAtividade(item) {
+    String atividade = item.data()['activity'];
+    String dataEntrega = item.data()['dueDate'];
+
+    return Card(
+      elevation: 10,
+      shadowColor: Colors.grey.shade200,
+      child: ListTile(
+        title: Text(
+          atividade,
+          style: TextStyle(
+            fontSize: 16,
+          ),
+        ),
+        subtitle: Text('Data de entrega: $dataEntrega'),
+        trailing: IconButton(
+          icon: Icon(Icons.delete),
+          onPressed: () {
+            activity.doc(item.id).delete();
+          },
+        ),
+        onTap: () {},
+      ),
+    );
   }
 
   @override
@@ -45,96 +74,35 @@ class _AtividadesState extends State<Atividades> {
               'Minhas Atividades',
               'Consulte ou cadastre atividades a serem feitas.',
             ),
-            Container(
-              child: DefaultTabController(
-                length: 3,
-                child: TabBar(
-                  indicatorColor: Colors.teal.shade900,
-                  labelColor: Colors.teal.shade900,
-                  tabs: [
-                    Tab(text: 'Em aberto'),
-                    Tab(text: 'Concluida'),
-                    Tab(text: 'Atrasada'),
-                  ],
-                ),
-              ),
-            ),
             Expanded(
               child: Container(
-                child: ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  itemCount: atividades.length,
-                  itemBuilder: (context, index) {
-                    return Card(
-                      elevation: 10,
-                      shadowColor: Colors.grey.shade200,
-                      child: ListTile(
-                        title: Text(
-                          atividades[index],
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                        subtitle: Text("Data de entrega: ${data[index]}"),
-                        trailing: PopupMenuButton(
-                          itemBuilder: (context) => <PopupMenuEntry>[
-                            PopupMenuItem(
-                              child: Row(
-                                children: [
-                                  Icon(Icons.edit),
-                                  Text('Editar'),
-                                ],
-                              ),
-                              onTap: () {},
-                            ),
-                            PopupMenuItem(
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.check,
-                                  ),
-                                  Text(
-                                    'Marcar como Concluida',
-                                  ),
-                                ],
-                              ),
-                              onTap: () {},
-                            ),
-                            PopupMenuItem(
-                              child: Row(
-                                children: [
-                                  Icon(
-                                    Icons.delete,
-                                    color: Colors.red.shade900,
-                                  ),
-                                  Text(
-                                    'Excluir',
-                                    style: TextStyle(
-                                      color: Colors.red.shade900,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              onTap: () {
-                                setState(() {
-                                  atividades.removeAt(index);
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(SnackBar(
-                                    content:
-                                        Text('Matéria removida com sucesso!'),
-                                    duration: Duration(seconds: 2),
-                                  ));
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                        onTap: () {},
-                      ),
-                    );
-                  },
-                ),
-              ),
+                  child: StreamBuilder<QuerySnapshot>(
+                stream: activity.snapshots(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.none:
+                      return const Center(
+                          child: Text('Não foi possível conectar ao Firebase'));
+
+                    case ConnectionState.waiting:
+                      return const Center(child: CircularProgressIndicator());
+
+                    default:
+                      final dados = snapshot.requireData;
+                      if (dados.size == 0) {
+                        return Center(
+                            child: Text(
+                          'Nenhuma atividade cadastrada',
+                        ));
+                      }
+                      return ListView.builder(
+                          itemCount: dados.size,
+                          itemBuilder: (context, index) {
+                            return CardAtividade(dados.docs[index]);
+                          });
+                  }
+                },
+              )),
             )
           ],
         ),
@@ -160,21 +128,33 @@ class _AtividadesState extends State<Atividades> {
               height: 300,
               child: Column(
                 children: [
-                  TextInput('Nome atividade'),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Selecione a data de entrega',
-                        style: TextStyle(
+                  Container(
+                    height: 70,
+                    child: TextFormField(
+                      controller: acitivityName,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        labelText: 'Nome da atividade',
+                        labelStyle: TextStyle(
                           fontSize: 14,
                         ),
+                        focusColor: Colors.teal.shade900,
                       ),
-                      IconButton(
-                        onPressed: () {},
-                        icon: Icon(Icons.calendar_today),
-                      )
-                    ],
+                    ),
+                  ),
+                  Container(
+                    height: 70,
+                    child: TextFormField(
+                      controller: dueDateName,
+                      keyboardType: TextInputType.text,
+                      decoration: InputDecoration(
+                        labelText: 'Data de vencimento',
+                        labelStyle: TextStyle(
+                          fontSize: 14,
+                        ),
+                        focusColor: Colors.teal.shade900,
+                      ),
+                    ),
                   ),
                   Padding(
                     padding: EdgeInsets.fromLTRB(0, 20, 0, 20),
@@ -198,7 +178,22 @@ class _AtividadesState extends State<Atividades> {
                 ),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: () {
+                  setState(() {
+                    activity.add({
+                      'activity': acitivityName.text,
+                      'dueDate': dueDateName.text,
+                    }).then((value) {
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Atividade adicionada com sucesso!'),
+                        duration: Duration(seconds: 2),
+                      ));
+
+                      acitivityName.text = '';
+                      Navigator.pop(context);
+                    });
+                  });
+                },
                 child: Text('Salvar'),
                 style: TextButton.styleFrom(
                   padding: EdgeInsets.all(10.0),

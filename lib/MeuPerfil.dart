@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:my_note/Home.dart';
 import 'package:my_note/components/Header.dart';
 import 'package:my_note/components/ItemsAppBar.dart';
 import 'package:my_note/components/MainButton.dart';
@@ -13,11 +14,185 @@ class MeuPerfil extends StatefulWidget {
 }
 
 class _MeuPerfilState extends State<MeuPerfil> {
-  var name = profile.name;
-  var email = profile.email;
-  var password = profile.password;
-  var birthDate = profile.birthDate;
-  var nomeController = TextEditingController();
+  var nameController = TextEditingController();
+  var birthDateController = TextEditingController();
+  var email = FirebaseAuth.instance.currentUser?.email;
+
+  late CollectionReference users;
+
+  @override
+  void initState() {
+    super.initState();
+    users = FirebaseFirestore.instance.collection('users');
+  }
+
+  Widget ShowInformations(item) {
+    String name = item.data()['name'];
+    String email = item.data()['email'];
+    String password = item.data()['password'];
+    String birthDate = item.data()['birthDate'];
+
+    return Column(
+      children: [
+        Center(
+          child: Card(
+            child: ListTile(
+              title: Text('Editar Nome'),
+              subtitle: Text(name),
+              trailing: IconButton(
+                onPressed: () {
+                  nameController.text = name;
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text('Editar nome'),
+                          content: Container(
+                            height: 100,
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 100,
+                                  child: TextFormField(
+                                    controller: nameController,
+                                    keyboardType: TextInputType.text,
+                                    decoration: InputDecoration(
+                                      labelText: 'Digite o nome',
+                                      labelStyle: TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                      focusColor: Colors.teal.shade900,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('Cancelar'),
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.all(10.0),
+                                primary: Colors.red.shade900,
+                                textStyle: TextStyle(fontSize: 14),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                users.doc(item.id).update({
+                                  'name': nameController.text,
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Text('Salvar'),
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.all(10.0),
+                                primary: Colors.white,
+                                backgroundColor: Colors.teal.shade900,
+                                textStyle: TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          ],
+                        );
+                      });
+                },
+                icon: Icon(Icons.edit),
+              ),
+            ),
+          ),
+        ),
+        Center(
+          child: Card(
+            child: ListTile(
+              title: Text('Email'),
+              subtitle: Text(email),
+            ),
+          ),
+        ),
+        Center(
+          child: Card(
+            child: ListTile(
+              title: Text('Senha'),
+              subtitle: Text(password),
+            ),
+          ),
+        ),
+        Center(
+          child: Card(
+            child: ListTile(
+              title: Text('Data de nascimento'),
+              subtitle: Text(birthDate),
+              trailing: IconButton(
+                onPressed: () {
+                  birthDateController.text = birthDate;
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: Text('Editar nome'),
+                          content: Container(
+                            height: 100,
+                            child: Column(
+                              children: [
+                                Container(
+                                  height: 100,
+                                  child: TextFormField(
+                                    controller: birthDateController,
+                                    keyboardType: TextInputType.text,
+                                    decoration: InputDecoration(
+                                      labelText: 'Digite o nome',
+                                      labelStyle: TextStyle(
+                                        fontSize: 14,
+                                      ),
+                                      focusColor: Colors.teal.shade900,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: Text('Cancelar'),
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.all(10.0),
+                                primary: Colors.red.shade900,
+                                textStyle: TextStyle(fontSize: 14),
+                              ),
+                            ),
+                            TextButton(
+                              onPressed: () {
+                                users.doc(item.id).update({
+                                  'birthDate': birthDateController.text,
+                                });
+                                Navigator.pop(context);
+                              },
+                              child: Text('Salvar'),
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.all(10.0),
+                                primary: Colors.white,
+                                backgroundColor: Colors.teal.shade900,
+                                textStyle: TextStyle(fontSize: 14),
+                              ),
+                            ),
+                          ],
+                        );
+                      });
+                },
+                icon: Icon(Icons.edit),
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,63 +255,20 @@ class _MeuPerfilState extends State<MeuPerfil> {
                     onPressed: () {},
                   ),
                 ),
-                Center(
-                  child: Card(
-                    child: ListTile(
-                      title: Text('Nome'),
-                      subtitle: Text(name),
-                      trailing: IconButton(
-                        onPressed: () {
-                          EditarInfosModal('Editar nome:', 'Nome');
-                        },
-                        icon: Icon(Icons.edit),
-                      ),
-                    ),
-                  ),
-                ),
-                Center(
-                  child: Card(
-                    child: ListTile(
-                      title: Text('E-mail'),
-                      subtitle: Text(email),
-                      trailing: IconButton(
-                        onPressed: () {
-                          EditarInfosModal('Editar e-mail:', 'E-mail');
-                        },
-                        icon: Icon(Icons.edit),
-                      ),
-                    ),
-                  ),
-                ),
-                Center(
-                  child: Card(
-                    child: ListTile(
-                      title: Text('Senha'),
-                      subtitle: Text(password),
-                      trailing: IconButton(
-                        onPressed: () {
-                          EditarInfosModal('Editar senha:', 'Senha');
-                        },
-                        icon: Icon(Icons.edit),
-                      ),
-                    ),
-                  ),
-                ),
-                Center(
-                  child: Card(
-                    child: ListTile(
-                      title: Text('Data nascimento'),
-                      subtitle: Text(birthDate),
-                      trailing: IconButton(
-                        onPressed: () {
-                          EditarInfosModal(
-                              'Editar data de nascimento:', 'Data nascimento');
-                        },
-                        icon: Icon(Icons.edit),
-                      ),
-                    ),
-                  ),
-                ),
+                Container(
+                    child: StreamBuilder<QuerySnapshot>(
+                  stream: users.where('email', isEqualTo: email).snapshots(),
+                  builder: (context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return const Center(child: CircularProgressIndicator());
+
+                      default:
+                        final dados = snapshot.requireData;
+                        return ShowInformations(dados.docs[0]);
+                    }
+                  },
+                )),
                 Container(
                   margin: EdgeInsets.only(top: 40),
                   child: MainButton('Salvar', 'home'),
@@ -147,46 +279,5 @@ class _MeuPerfilState extends State<MeuPerfil> {
         ),
       ),
     );
-  }
-
-  EditarInfosModal(title, label) {
-    return showDialog(
-        context: context,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(title),
-            content: Container(
-              height: 100,
-              child: Column(
-                children: [
-                  TextInput(label),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Cancelar'),
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.all(10.0),
-                  primary: Colors.red.shade900,
-                  textStyle: TextStyle(fontSize: 14),
-                ),
-              ),
-              TextButton(
-                onPressed: () {},
-                child: Text('Salvar'),
-                style: TextButton.styleFrom(
-                  padding: EdgeInsets.all(10.0),
-                  primary: Colors.white,
-                  backgroundColor: Colors.teal.shade900,
-                  textStyle: TextStyle(fontSize: 14),
-                ),
-              ),
-            ],
-          );
-        });
   }
 }

@@ -186,6 +186,7 @@ class _CadastrarState extends State<Cadastrar> {
           'name': name,
           'email': email,
           'birthDate': birthDate,
+          'password': password,
         }).then((value) {});
 
         FirebaseAuth.instance

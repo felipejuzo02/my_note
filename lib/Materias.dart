@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:my_note/components/Header.dart';
 import 'package:my_note/components/ItemsAppBar.dart';
@@ -13,6 +14,7 @@ class Materias extends StatefulWidget {
 class _MateriasState extends State<Materias> {
   late CollectionReference materiasT;
   var materiaName = TextEditingController();
+  var email = FirebaseAuth.instance.currentUser?.email;
 
   @override
   void initState() {
@@ -32,45 +34,11 @@ class _MateriasState extends State<Materias> {
             fontSize: 16,
           ),
         ),
-        trailing: PopupMenuButton(
-          itemBuilder: (context) => <PopupMenuEntry>[
-            PopupMenuItem(
-              child: Row(
-                children: [
-                  Icon(Icons.edit),
-                  Text('Editar'),
-                ],
-              ),
-              onTap: () async {
-                materiasT.doc(item.id).set({'name': 'clayton'});
-              },
-            ),
-            PopupMenuItem(
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.delete,
-                    color: Colors.red.shade900,
-                  ),
-                  Text(
-                    'Excluir',
-                    style: TextStyle(
-                      color: Colors.red.shade900,
-                    ),
-                  ),
-                ],
-              ),
-              onTap: () {
-                setState(() {
-                  materiasT.doc(item.id).delete();
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('Matéria removida com sucesso!'),
-                    duration: Duration(seconds: 2),
-                  ));
-                });
-              },
-            ),
-          ],
+        trailing: IconButton(
+          icon: Icon(Icons.delete),
+          onPressed: () {
+            materiasT.doc(item.id).delete();
+          },
         ),
       ),
     );
@@ -109,6 +77,12 @@ class _MateriasState extends State<Materias> {
 
                     default:
                       final dados = snapshot.requireData;
+                      if (dados.size == 0) {
+                        return Center(
+                            child: Text(
+                          'Nenhuma matéria cadastrada',
+                        ));
+                      }
                       return ListView.builder(
                           itemCount: dados.size,
                           itemBuilder: (context, index) {

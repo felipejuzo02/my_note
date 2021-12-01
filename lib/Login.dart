@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_note/classes/InfosLogin.dart';
+import 'package:my_note/classes/Profile.dart';
 import 'package:my_note/components/SecundaryButton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -9,6 +9,8 @@ class Login extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
 }
+
+Profile profile = new Profile('name', 'email', 'birthDate', 'password');
 
 class _LoginState extends State<Login> {
   var textEmail = TextEditingController();
@@ -99,14 +101,9 @@ class _LoginState extends State<Login> {
 
   void login(email, password) {
     var message = '';
-    var emailObj = InfosLogin(email);
     FirebaseAuth.instance
         .signInWithEmailAndPassword(email: email, password: password)
-        .then((value) => Navigator.pushNamed(
-              context,
-              'home',
-              arguments: emailObj,
-            ))
+        .then((value) => Navigator.pushNamed(context, 'home'))
         .catchError((err) {
       if (err.code == 'user-not-found' || err.code == 'invalid-email') {
         message =

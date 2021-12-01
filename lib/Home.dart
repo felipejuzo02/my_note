@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:my_note/classes/Profile.dart';
 import 'package:my_note/components/Header.dart';
 import 'package:my_note/components/ItemsAppBar.dart';
 
@@ -10,12 +10,6 @@ class Home extends StatefulWidget {
   @override
   _HomeState createState() => _HomeState();
 }
-
-getTeste() {
-  return 'teste';
-}
-
-Profile profile = new Profile('name', 'email', 'birthDate', 'password');
 
 class _HomeState extends State<Home> {
   @override

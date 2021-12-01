@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:my_note/Home.dart';
+import 'package:my_note/classes/InfosLogin.dart';
 
 class ItemsAppBar extends StatefulWidget {
   const ItemsAppBar({Key? key}) : super(key: key);
@@ -9,54 +11,76 @@ class ItemsAppBar extends StatefulWidget {
   _ItemsAppBarState createState() => _ItemsAppBarState();
 }
 
-Widget informations(item) {
-  String name = item.data()['name'];
-  return Text(name);
-}
-
 class _ItemsAppBarState extends State<ItemsAppBar> {
   String name = 's';
-  late CollectionReference materiasT;
+  late CollectionReference users;
 
   @override
   void initState() {
     super.initState();
-    materiasT = FirebaseFirestore.instance.collection('subjects');
+    users = FirebaseFirestore.instance.collection('users');
+  }
+
+  Widget ShowInformations(item) {
+    String name = item.data()['name'];
+    String email = item.data()['email'];
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          name,
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 26,
+          ),
+        ),
+        Text(
+          email,
+          style: TextStyle(
+            color: Colors.grey.shade200,
+            fontSize: 12,
+          ),
+        )
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    var name = profile.name;
-    var email = profile.email;
-    // var email = ModalRoute.of(context)!.settings.arguments as InfosLogin;
+    var email = FirebaseAuth.instance.currentUser?.email;
     return Container(
       child: ListView(
         children: [
           DrawerHeader(
-            decoration: BoxDecoration(
-              color: Colors.teal.shade900,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 26,
-                  ),
-                ),
-                Text(
-                  email,
-                  style: TextStyle(
-                    color: Colors.grey.shade200,
-                    fontSize: 12,
-                  ),
-                )
-              ],
-            ),
-          ),
+              decoration: BoxDecoration(
+                color: Colors.teal.shade900,
+              ),
+              child: StreamBuilder<QuerySnapshot>(
+                stream: users.where('email', isEqualTo: email).snapshots(),
+                builder: (context, snapshot) {
+                  switch (snapshot.connectionState) {
+                    case ConnectionState.waiting:
+                      return const Center(child: CircularProgressIndicator());
+
+                    default:
+                      final dados = snapshot.requireData;
+                      return ListView.builder(
+                          itemCount: dados.size,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.fromLTRB(0, 40, 0, 20),
+                                  child: ShowInformations(dados.docs[index]),
+                                )
+                              ],
+                            );
+                          });
+                  }
+                },
+              )),
           ListTile(
             leading: Icon(Icons.home),
             title: Text('Home'),
@@ -131,6 +155,7 @@ class _ItemsAppBarState extends State<ItemsAppBar> {
               ),
             ),
             onTap: () {
+              FirebaseAuth.instance.signOut();
               Navigator.pushNamed(
                 context,
                 'login',
