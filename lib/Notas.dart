@@ -284,6 +284,10 @@ class _NotasState extends State<Notas> {
                   ),
                   onPressed: () {
                     notes.doc(id).delete();
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: Text('Notas excluidas com sucesso!!'),
+                      duration: Duration(seconds: 2),
+                    ));
                     Navigator.pop(context);
                   },
                 ),

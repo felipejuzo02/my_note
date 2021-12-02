@@ -182,16 +182,16 @@ class _CadastrarState extends State<Cadastrar> {
         birthDate == '') {
     } else {
       if (password == repeatPassword) {
-        FirebaseFirestore.instance.collection('users').add({
-          'name': name,
-          'email': email,
-          'birthDate': birthDate,
-          'password': password,
-        }).then((value) {});
-
         FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password)
             .then((value) {
+          FirebaseFirestore.instance.collection('users').add({
+            'name': name,
+            'email': email,
+            'birthDate': birthDate,
+            'password': password,
+          });
+
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text('Conta criado com sucesso!!'),
             duration: const Duration(seconds: 3),

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:my_note/components/Header.dart';
 import 'package:my_note/components/ItemsAppBar.dart';
 import 'package:my_note/components/MainButton.dart';
-import 'package:my_note/components/Input.dart';
 
 class MeuPerfil extends StatefulWidget {
   const MeuPerfil({Key? key}) : super(key: key);
@@ -85,6 +84,12 @@ class _MeuPerfilState extends State<MeuPerfil> {
                                 users.doc(item.id).update({
                                   'name': nameController.text,
                                 });
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text('Nome alterado com sucesso!!'),
+                                  duration: const Duration(seconds: 3),
+                                  backgroundColor: Colors.green.shade900,
+                                ));
                                 Navigator.pop(context);
                               },
                               child: Text('Salvar'),
@@ -171,6 +176,14 @@ class _MeuPerfilState extends State<MeuPerfil> {
                                 users.doc(item.id).update({
                                   'birthDate': birthDateController.text,
                                 });
+
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                  content: Text(
+                                      'Data de nascimento alterado com sucesso!!'),
+                                  duration: const Duration(seconds: 3),
+                                  backgroundColor: Colors.green.shade900,
+                                ));
                                 Navigator.pop(context);
                               },
                               child: Text('Salvar'),

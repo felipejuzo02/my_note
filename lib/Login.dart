@@ -102,11 +102,13 @@ class _LoginState extends State<Login> {
         .signInWithEmailAndPassword(email: email, password: password)
         .then((value) => Navigator.pushNamed(context, 'home'))
         .catchError((err) {
-      if (err.code == 'user-not-found' || err.code == 'invalid-email') {
+      if (err.code == 'user-not-found' ||
+          err.code == 'invalid-email' ||
+          err.code == 'wrong-password') {
         message =
             'Usuário não encontrado!! Verifique os dados ou faça o cadastro.';
       } else {
-        message = err.message;
+        message = err.code;
       }
 
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
