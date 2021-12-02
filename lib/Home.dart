@@ -12,8 +12,39 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  late CollectionReference activity;
+  late CollectionReference subjects;
+
+  @override
+  void initState() {
+    super.initState();
+    activity = FirebaseFirestore.instance.collection('activities');
+    subjects = FirebaseFirestore.instance.collection('subjects');
+  }
+
+  Widget CardActivity(item) {
+    String atividade = item.data()['activity'];
+    String dataEntrega = item.data()['dueDate'];
+
+    return Card(
+      elevation: 10,
+      shadowColor: Colors.grey.shade200,
+      child: ListTile(
+        title: Text(
+          atividade,
+          style: TextStyle(
+            fontSize: 16,
+          ),
+        ),
+        subtitle: Text('Data de entrega: $dataEntrega'),
+        onTap: () {},
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    var email = FirebaseAuth.instance.currentUser?.email;
     return Scaffold(
         appBar: AppBar(
           title: Text('Minha nota'),
@@ -103,33 +134,46 @@ class _HomeState extends State<Home> {
                       'Próxima(s) atividade a vencer',
                       style: Theme.of(context).textTheme.headline3,
                     ),
-                    Card(
-                      elevation: 10,
-                      shadowColor: Colors.grey.shade200,
-                      child: ListTile(
-                        title: Text(
-                          'Projeto App Flutter',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                        subtitle: Text("Data de entrega: 21/10/2021"),
-                        onTap: () {},
-                      ),
-                    ),
-                    Card(
-                      elevation: 10,
-                      shadowColor: Colors.grey.shade200,
-                      child: ListTile(
-                        title: Text(
-                          'Projeto MPCT - Power Point',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                        subtitle: Text("Data de entrega: 21/10/2021"),
-                        onTap: () {},
-                      ),
+                    StreamBuilder<QuerySnapshot>(
+                      stream: activity.snapshots(),
+                      builder: (context, snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.none:
+                            return const Center(
+                                child: Text(
+                                    'Não foi possível conectar ao Firebase'));
+
+                          case ConnectionState.waiting:
+                            return const Center(
+                                child: CircularProgressIndicator());
+
+                          default:
+                            final dados = snapshot.requireData;
+                            if (dados.size == 0) {
+                              return Padding(
+                                padding: EdgeInsets.only(top: 10),
+                                child:
+                                    Text('Nenhuma atividade prestes a vencer'),
+                              );
+                            }
+
+                            if (dados.size >= 3) {
+                              return Column(
+                                children: [
+                                  CardActivity(dados.docs[0]),
+                                  CardActivity(dados.docs[1]),
+                                  CardActivity(dados.docs[2]),
+                                ],
+                              );
+                            } else {
+                              return Column(
+                                children: dados.docs
+                                    .map((doc) => CardActivity(doc))
+                                    .toList(),
+                              );
+                            }
+                        }
+                      },
                     ),
                   ],
                 ),
@@ -143,23 +187,68 @@ class _HomeState extends State<Home> {
                       'Suas estatísticas',
                       style: Theme.of(context).textTheme.headline3,
                     ),
-                    CardHighlights(
-                      'Sua maior nota',
-                      Icons.star,
-                      'Programação orientada a gambiarras',
-                      'Nota: 10',
+                    StreamBuilder<QuerySnapshot>(
+                      stream: subjects.snapshots(),
+                      builder: (context, snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.none:
+                            return const Center(
+                                child: Text(
+                                    'Não foi possível conectar ao Firebase'));
+
+                          case ConnectionState.waiting:
+                            return const Center(
+                                child: CircularProgressIndicator());
+
+                          default:
+                            final dados = snapshot.requireData;
+                            var subjectsNumber = dados.size;
+
+                            if (dados.size == 0) {
+                              return Padding(
+                                padding: EdgeInsets.only(top: 0),
+                              );
+                            }
+
+                            return Column(
+                              children: [
+                                CardHighlights(
+                                  'Quantidade de matérias cadastradas',
+                                  Icons.view_in_ar,
+                                  'Total: $subjectsNumber',
+                                )
+                              ],
+                            );
+                        }
+                      },
                     ),
-                    CardHighlights(
-                      'Sua menor nota',
-                      Icons.thumb_down,
-                      'Ingles',
-                      'Nota: 6',
-                    ),
-                    CardHighlights(
-                      'Atividades feitas',
-                      Icons.task,
-                      'Programação orientada a gambiarras',
-                      'Quantidade: 8',
+                    StreamBuilder<QuerySnapshot>(
+                      stream: activity.snapshots(),
+                      builder: (context, snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.none:
+                            return const Center(
+                                child: Text(
+                                    'Não foi possível conectar ao Firebase'));
+
+                          case ConnectionState.waiting:
+                            return const Center(
+                                child: CircularProgressIndicator());
+
+                          default:
+                            final dados = snapshot.requireData;
+                            var activitiesNumber = dados.size;
+                            return Column(
+                              children: [
+                                CardHighlights(
+                                  'Quantidade de atividades a serem feitas',
+                                  Icons.grading,
+                                  'Total: $activitiesNumber',
+                                )
+                              ],
+                            );
+                        }
+                      },
                     ),
                   ],
                 ),
@@ -169,7 +258,7 @@ class _HomeState extends State<Home> {
         ));
   }
 
-  Widget CardHighlights(title, icon, text, value) {
+  Widget CardHighlights(title, icon, value) {
     return Container(
         height: 200,
         child: SizedBox.expand(
@@ -191,12 +280,6 @@ class _HomeState extends State<Home> {
                   size: 70,
                 ),
                 Text(
-                  text,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w800,
-                  ),
-                ),
-                Text(
                   value,
                   style: TextStyle(
                     fontSize: 16,
@@ -208,4 +291,6 @@ class _HomeState extends State<Home> {
           ),
         ));
   }
+
+  void searchBestNote() {}
 }

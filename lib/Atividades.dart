@@ -13,19 +13,11 @@ class Atividades extends StatefulWidget {
 
 class _AtividadesState extends State<Atividades> {
   late CollectionReference activity;
-  var atividades = [];
-  var data = [];
   var acitivityName = TextEditingController();
   var dueDateName = TextEditingController();
 
   @override
   void initState() {
-    atividades.add('Projeto MPCT - Power Point');
-    data.add('21/10/2021');
-    atividades.add('Projeto App Flutter');
-    data.add('21/10/2021');
-    atividades.add('Protótipo Tela 1');
-    data.add('29/11/2021');
     super.initState();
     activity = FirebaseFirestore.instance.collection('activities');
   }
@@ -48,7 +40,14 @@ class _AtividadesState extends State<Atividades> {
         trailing: IconButton(
           icon: Icon(Icons.delete),
           onPressed: () {
-            activity.doc(item.id).delete();
+            activity.doc(item.id).delete().then((value) {
+              setState(() {
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                  content: Text('Atividade removida com sucesso!'),
+                  duration: Duration(seconds: 2),
+                ));
+              });
+            });
           },
         ),
         onTap: () {},
@@ -190,6 +189,7 @@ class _AtividadesState extends State<Atividades> {
                       ));
 
                       acitivityName.text = '';
+                      dueDateName.text = '';
                       Navigator.pop(context);
                     });
                   });

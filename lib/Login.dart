@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:my_note/classes/Profile.dart';
 import 'package:my_note/components/SecundaryButton.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -9,8 +8,6 @@ class Login extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
 }
-
-Profile profile = new Profile('name', 'email', 'birthDate', 'password');
 
 class _LoginState extends State<Login> {
   var textEmail = TextEditingController();

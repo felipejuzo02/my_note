@@ -1,8 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:my_note/Home.dart';
-import 'package:my_note/classes/InfosLogin.dart';
 
 class ItemsAppBar extends StatefulWidget {
   const ItemsAppBar({Key? key}) : super(key: key);
@@ -85,7 +83,6 @@ class _ItemsAppBarState extends State<ItemsAppBar> {
             leading: Icon(Icons.home),
             title: Text('Home'),
             onTap: () {
-              print(name);
               Navigator.pushNamed(
                 context,
                 'home',

@@ -38,6 +38,10 @@ class _MateriasState extends State<Materias> {
           icon: Icon(Icons.delete),
           onPressed: () {
             materiasT.doc(item.id).delete();
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+              content: Text('Matéria removida com sucesso!!'),
+              duration: Duration(seconds: 2),
+            ));
           },
         ),
       ),

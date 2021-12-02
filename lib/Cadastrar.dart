@@ -216,7 +216,7 @@ class _CadastrarState extends State<Cadastrar> {
         });
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text('As senhas nao conferem'),
+          content: Text('As senhas nao conferem!!'),
           duration: const Duration(seconds: 3),
           backgroundColor: Colors.red.shade900,
         ));
