@@ -29,7 +29,9 @@ Some widgets used are:
 - ListView
 - ListTile
 
-## Next steps
-Some next steps to follow are:
-- Backend construction
-- Ajustments in the TabBar
+## Database
+- Firebase Firestore
+
+## Authentication
+- Firebase Authentication
+
